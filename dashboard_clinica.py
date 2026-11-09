@@ -10,13 +10,12 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CÓDIGO CSS (Limpia los iconos pero deja la flechita) ---
+# --- CÓDIGO CSS (Arregla el contraste y deja la flechita) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
-    
     [data-testid="stToolbarActions"] {display: none !important;}
     [data-testid="stToolbar"] {background-color: transparent !important;}
     
@@ -30,9 +29,20 @@ st.markdown("""
         z-index: 999999 !important;
     }
     
-    .stApp {background-color: #f8f9fa;}
-    .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
-    .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 20px;}
+    /* FORZAR COLOR DE TEXTO OSCURO PARA QUE SE LEA EN CELULARES CON MODO OSCURO */
+    .stApp, .stMarkdown, p, span, h1, h2, h3, h4, h5, h6, label {
+        color: #31333F !important;
+    }
+    
+    /* Estilos personalizados de los títulos */
+    .big-title {color: #0e4d64 !important; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
+    .sub-title {color: #6c757d !important; font-size: 1.2rem; margin-bottom: 20px;}
+    
+    /* Forzar fondo claro en la app */
+    .stApp {background-color: #f8f9fa !important;}
+    
+    /* Asegurar que el chat no herede fondos raros */
+    [data-testid="stChatMessage"] {background-color: transparent !important;}
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     </style>
 """, unsafe_allow_html=True)
@@ -100,7 +110,6 @@ with col_info:
     st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
-    # Botón de "Nueva Consulta"
     col_titulo, col_boton = st.columns([2, 1])
     with col_titulo:
         st.subheader("💬 Agenda tu cita aquí")
