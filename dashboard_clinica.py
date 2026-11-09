@@ -79,8 +79,11 @@ st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. A
 col_info, col_chat = st.columns([1, 1], gap="large")
 
 with col_info:
-    # Usamos una foto profesional de internet para que no falle. 
-    st.image("https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
+    # AQUÍ ESTÁ TU IMAGEN DE LA IA (Asegúrate de que el archivo se llame foto.jpg)
+    try:
+        st.image("foto.jpg", use_container_width=True)
+    except:
+        st.warning("Subiendo imagen... (Asegúrate de que el archivo en GitHub se llame foto.jpg)")
     
     st.write("### Bienvenido a la excelencia dental")
     st.write("En **Smile Factory** combinamos la calidez humana con la inteligencia artificial más avanzada. Nuestra recepcionista virtual está disponible las 24 horas.")
