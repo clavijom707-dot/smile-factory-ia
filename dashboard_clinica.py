@@ -10,12 +10,12 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS PARA DARLE ESTILO DE WEB REAL ---
+# --- CÓDIGO CSS CORREGIDO (Oculta menús pero deja la flechita del panel) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
+    .stDeployButton {display:none;} /* Oculta el botón de Deploy */
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
     .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 30px;}
@@ -26,7 +26,7 @@ st.markdown("""
 # --- SEGURIDAD: Lee el token ---
 ia_token = st.secrets["DEEPSEEK_TOKEN"]
 
-# Inicializamos el chat en el estado de la sesión
+# Inicializamos el chat
 if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
 
@@ -38,7 +38,6 @@ with st.sidebar:
     if password == "smile2026":
         st.success("Modo Administrador Activado")
         
-        # MENÚ DE OPCIONES RÁPIDAS
         opcion = st.radio(
             "Seleccione el horario de atención de hoy:",
             ("Solo Mañanas (8am - 12pm)", "Solo Tardes (2pm - 6pm)", "Mañana y Tarde", "Personalizado...")
@@ -58,20 +57,17 @@ with st.sidebar:
             
         st.divider()
         
-        # BOTÓN PARA LIMPIAR EL CHAT
         if st.button("🗑️ Limpiar Historial de Chat"):
             st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
             st.rerun() 
             
     else:
-        # Horario por defecto si no se pone la contraseña
         horario_personalizado = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
 
 # --- ENCABEZADO DE LA WEB ---
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
-# --- CREAMOS DOS COLUMNAS ---
 col_info, col_chat = st.columns([1, 1], gap="large")
 
 with col_info:
@@ -82,7 +78,6 @@ with col_info:
     st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
-    # --- EL CEREBRO DE NATALY ---
     system_prompt = f"""
     Eres Nataly, la recepcionista virtual de la clínica dental 'Smile Factory'.
     Tus reglas:
@@ -109,7 +104,6 @@ with col_chat:
         except Exception as e:
             return f"Error de conexión: {e}"
 
-    # --- INTERFAZ DEL CHAT ---
     st.subheader("💬 Agenda tu cita aquí")
     
     with st.container(border=True):
