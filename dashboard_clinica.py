@@ -10,23 +10,21 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS ARREGLADO (Deja la flechita visible y oculta solo Share/GitHub) ---
+# --- CÓDIGO CSS (Oculta Share/GitHub y mantiene la flechita) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
     
-    /* Ocultamos SOLO la barra de herramientas (Share/GitHub), NO la cabecera entera */
+    /* Ocultamos SOLO la barra de herramientas (Share/GitHub) */
     [data-testid="stToolbar"] {display: none;}
     
-    /* Estilos visuales */
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
     .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 20px;}
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     
-    /* Iconos sociales */
     .social-links a {text-decoration: none; font-size: 1.1rem; margin-right: 20px; font-weight: bold; color: #0e4d64;}
     .social-links a:hover { color: #007bff; }
     </style>
@@ -50,7 +48,6 @@ with st.sidebar:
     if password == "smile2026":
         st.success("Modo Administrador Activado")
         
-        # --- BOTÓN DE COMPARTIR EN EL PANEL ---
         st.write("### 🔗 Compartir Clínica")
         enlace_app = "https://smile-factory-ia-fkq5qvkpcytjtlfnats7yp.streamlit.app"
         st.code(enlace_app, language="text")
@@ -84,7 +81,6 @@ with st.sidebar:
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
-# --- REDES SOCIALES ---
 st.markdown("""
     <div class="social-links">
         <a href="https://facebook.com" target="_blank">📘 Facebook</a>
@@ -98,14 +94,15 @@ st.markdown("""
 col_info, col_chat = st.columns([1, 1], gap="large")
 
 with col_info:
-    st.image("foto_smile.jpg", use_container_width=True)
+    # FOTO DE INTERNET (Evita el error de OSError de la foto local)
+    st.image("https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
     st.write("### Bienvenido a la excelencia dental")
     st.write("En **Smile Factory** combinamos la calidez humana con la inteligencia artificial más avanzada. Nuestra recepcionista virtual está disponible las 24 horas.")
     st.markdown("#### Nuestros Servicios")
     st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
-    # Botón de "Nueva Consulta" para limpiar la memoria del paciente anterior
+    # Botón de "Nueva Consulta"
     col_titulo, col_boton = st.columns([2, 1])
     with col_titulo:
         st.subheader("💬 Agenda tu cita aquí")
@@ -140,7 +137,7 @@ with col_chat:
         except Exception as e:
             return f"Error de conexión: {e}"
 
-    # Caja de chat con altura fija
+    # Caja de chat con altura fija (El cuadro de texto siempre queda abajo)
     with st.container(height=400, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
