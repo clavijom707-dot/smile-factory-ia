@@ -18,10 +18,9 @@ col4.metric("Ingresos Estimados", "$600", "+$150")
 
 st.divider()
 
+# --- EL CEREBRO DE NATALY ---
 system_prompt = """
-system_prompt = """
-system_prompt = """
-Eres Nataly = """la recepcionista virtual de la clínica dental 'Smile Factory'.
+Eres Nataly, la recepcionista virtual de la clínica dental 'Smile Factory'.
 Tus reglas:
 1. Eres amable, empática, profesional y usas un tono cálido.
 2. Tu objetivo principal es agendar una cita.
@@ -30,14 +29,17 @@ Tus reglas:
 5. NO des diagnósticos médicos. Si hay dolor agudo, da el número de emergencias (cero nueve nueve, nueve nueve nueve).
 6. Si el paciente acepta la cita, confírmala y despídete.
 """
+
 def chatear(mensajes):
     url = "https://api.deepseek.com/chat/completions"
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {ia_token}"}
+    
     payload = {
         "model": "deepseek-chat",
         "messages": [{"role": "system", "content": system_prompt}] + mensajes,
         "temperature": 0.7
     }
+    
     try:
         req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers)
         with urllib.request.urlopen(req) as res:
@@ -45,10 +47,12 @@ def chatear(mensajes):
     except Exception as e:
         return f"Error de conexión: {e}"
 
-st.subheader("📱 Chat en Vivo con la IA (Modo Seguro)")
+# --- INTERFAZ DEL CHAT ---
+st.subheader("📱 Chat en Vivo con Nataly (Modo Prueba)")
 
 if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
+
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -56,7 +60,8 @@ for message in st.session_state.messages:
 if prompt := st.chat_input("Escriba aquí como si fuera un paciente..."):
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with with st.spinner("Nataly está escribiendo..."):
+
+    with st.spinner("Nataly está escribiendo..."):
         respuesta = chatear(st.session_state.messages)
         st.chat_message("assistant").markdown(respuesta)
         st.session_state.messages.append({"role": "assistant", "content": respuesta})
