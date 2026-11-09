@@ -10,28 +10,26 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS (Fuerza la flechita y oculta Share/GitHub) ---
+# --- CÓDIGO CSS (Fuerza la barra lateral abierta) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
-    
-    /* Ocultamos SOLO los iconos de programador */
     [data-testid="stToolbar"] {visibility: hidden;}
     
-    /* LA MAGIA: Forzamos a que la flechita (>>) siempre esté visible */
-    [data-testid="collapsedControl"] { 
-        display: block !important; 
-        visibility: visible !important; 
-        z-index: 9999;
-        background-color: #0e4d64;
-        border-radius: 5px;
-    }
-    
-    /* Forzamos a que la barra lateral se muestre */
+    /* FORZAR BARRA LATERAL ABIERTA SIEMPRE */
     [data-testid="stSidebar"] {
         display: block !important;
+        transform: translateX(0px) !important;
+        min-width: 300px !important;
+    }
+    
+    /* Mostrar flechita si se llega a cerrar */
+    [data-testid="collapsedControl"] {
+        display: block !important;
+        background-color: #0e4d64 !important;
+        border-radius: 5px !important;
     }
     
     .stApp {background-color: #f8f9fa;}
