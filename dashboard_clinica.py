@@ -10,26 +10,31 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS MEJORADO (Elimina Share, Estrella y GitHub) ---
+# --- CÓDIGO CSS (Limpia la pantalla y oculta la barra de arriba) ---
 st.markdown("""
     <style>
-    /* Ocultar menús, footer y el botón de Deploy */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
     
-    /* EL TRUCO FINAL: Ocultar la barra de herramientas superior (Share, Star, GitHub) */
-    [data-testid="stToolbar"] {visibility: hidden;}
-    [data-testid="stHeader"] {visibility: hidden;}
+    /* OCULTAMOS LA BARRA SUPERIOR NATIVA (Share, GitHub, etc.) */
+    [data-testid="stToolbar"] {display: none !important;}
+    [data-testid="stHeader"] {background: transparent;}
     
-    /* Estilos visuales de la clínica */
+    /* Estilos visuales */
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
     .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 20px;}
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     
-    /* Estilo para los iconos sociales de la clínica */
-    .social-links a {text-decoration: none; font-size: 1.1rem; margin-right: 20px; font-weight: bold; color: #0e4d64;}
+    /* Iconos sociales */
+    .social-links a {
+        text-decoration: none;
+        font-size: 1.1rem;
+        margin-right: 20px;
+        font-weight: bold;
+        color: #0e4d64;
+    }
     .social-links a:hover { color: #007bff; }
     </style>
 """, unsafe_allow_html=True)
@@ -52,6 +57,14 @@ with st.sidebar:
     if password == "smile2026":
         st.success("Modo Administrador Activado")
         
+        # --- NUEVO BOTÓN DE COMPARTIR EN EL PANEL ---
+        st.write("### 🔗 Compartir Clínica")
+        enlace_app = "https://smile-factory-ia-fkq5qvkpcytjtlfnats7yp.streamlit.app"
+        st.code(enlace_app, language="text") # st.code crea un botón automático de "copiar"
+        
+        st.divider()
+        
+        # CONFIGURACIÓN DE HORARIO
         opcion = st.radio(
             "Seleccione el horario de atención de hoy:",
             ("Solo Mañanas (8am - 12pm)", "Solo Tardes (2pm - 6pm)", "Mañana y Tarde", "Personalizado...")
@@ -79,6 +92,7 @@ with st.sidebar:
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
+# --- REDES SOCIALES ---
 st.markdown("""
     <div class="social-links">
         <a href="https://facebook.com" target="_blank">📘 Facebook</a>
@@ -127,7 +141,7 @@ with col_chat:
 
     st.subheader("💬 Agenda tu cita aquí")
     
-    # Caja de chat con altura fija (El cuadro siempre queda abajo)
+    # Caja de chat con altura fija
     with st.container(height=450, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
