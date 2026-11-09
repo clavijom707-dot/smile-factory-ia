@@ -14,12 +14,28 @@ st.markdown("""
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
     .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 30px;}
-    .st-emotion-cache-1v0mbdj img {border-radius: 15px;} /* Redondear imágenes */
+    .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     </style>
 """, unsafe_allow_html=True)
 
-# --- SEGURIDAD ---
+# --- SEGURIDAD: Lee el token ---
 ia_token = st.secrets["DEEPSEEK_TOKEN"]
+
+# --- PANEL DE ADMINISTRADOR (Barra Lateral) ---
+with st.sidebar:
+    st.header("⚙️ Acceso Doctores")
+    # Contraseña secreta (Puedes cambiarla por la que quieras)
+    password = st.text_input("Contraseña:", type="password")
+    
+    if password == "smile2026":
+        st.success("Modo Administrador Activado")
+        # Aquí el doctor puede cambiar su horario sin tocar código
+        horario_personalizado = st.text_area(
+            "Configuración de Horario:", 
+            value="La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
+        )
+    else:
+        horario_personalizado = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
 
 # --- ENCABEZADO DE LA WEB ---
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
@@ -29,27 +45,21 @@ st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. A
 col_info, col_chat = st.columns([1, 1], gap="large")
 
 with col_info:
-    # Imagen de clínica moderna (Alta calidad)
     st.image("https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
-    
     st.write("### Bienvenido a la excelencia dental")
-    st.write("""
-    En **Smile Factory** combinamos la calidez humana con la inteligencia artificial más avanzada. 
-    Nuestra recepcionista virtual está disponible las 24 horas para agendar tu cita sin esperas.
-    """)
-    
+    st.write("En **Smile Factory** combinamos la calidez humana con la inteligencia artificial más avanzada. Nuestra recepcionista virtual está disponible las 24 horas.")
     st.markdown("#### Nuestros Servicios")
-    st.markdown("- 🦷 **Limpieza Dental:** Para una sonrisa radiante.\n- 🪥 **Ortodoncia:** Brackets y alineadores invisibles.\n- 🩺 **Consulta General:** Diagnóstico completo.\n- ✨ **Blanqueamiento:** Resultados inmediatos.")
+    st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
-    # --- EL CEREBRO DE NATALY ---
-    system_prompt = """
+    # --- EL CEREBRO DE NATALY (Ahora usa la variable del administrador) ---
+    system_prompt = f"""
     Eres Nataly, la recepcionista virtual de la clínica dental 'Smile Factory'.
     Tus reglas:
     1. Eres amable, empática, profesional y usas un tono cálido.
     2. Tu objetivo principal es agendar una cita.
-    3. Pregunta el nombre, el motivo y si prefiere en la mañana o en la tarde.
-    4. IMPORTANTE: La agenda del doctor está llena en las tardes. SOLO ofrece citas en la MAÑANA (de 8:00 a 12:00). Si piden tarde, ofrece amablemente la mañana.
+    3. Pregunta el nombre y el motivo.
+    4. REGLA DE HORARIO DEL DOCTOR (OBLIGATORIO): {horario_personalizado}
     5. NO des diagnósticos médicos. Si hay dolor agudo, da el número de emergencias (cero nueve nueve, nueve nueve nueve).
     6. Si el paciente acepta la cita, confírmala y despídete.
     """
@@ -72,7 +82,6 @@ with col_chat:
     # --- INTERFAZ DEL CHAT ---
     st.subheader("💬 Agenda tu cita aquí")
     
-    # Contenedor con borde para el chat
     with st.container(border=True):
         if "messages" not in st.session_state:
             st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
