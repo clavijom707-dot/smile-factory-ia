@@ -96,7 +96,7 @@ col_info, col_chat = st.columns([1, 1], gap="large")
 with col_info:
     # AQUÍ ESTÁ EL TRUCO: Usamos un enlace web directo a una foto de clínica hermosa.
     # Así nunca fallará por "archivo no encontrado".
-    st.image("https://raw.githubusercontent.com/clavijom707-dot/smile-factory-ia/main/clinica.jpg.png", use_container_width=True)
+    st.image("clinica.jpg", use_container_width=True)
     
     st.write("### Bienvenido a la excelencia dental")
     st.write("En **Smile Factory** combinamos la calidez humana con la inteligencia artificial más avanzada. Nuestra recepcionista virtual está disponible las 24 horas.")
