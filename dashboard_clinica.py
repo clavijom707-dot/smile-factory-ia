@@ -7,18 +7,26 @@ st.set_page_config(
     page_title="Smile Factory - Clínica Dental", 
     page_icon="🦷", 
     layout="wide", 
-    initial_sidebar_state="collapsed"  # Mantiene la flechita para ocultar/mostrar el panel
+    initial_sidebar_state="collapsed"  # <--- La flechita estará ahí, oculta por defecto
 )
 
-# --- CÓDIGO CSS (Solo oculta los menús feos, sin romper la flechita) ---
+# --- CÓDIGO CSS ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
     
-    /* Ocultamos Share/GitHub de forma segura para no romper la flechita */
+    /* Ocultamos solo la barra superior de GitHub/Share */
     [data-testid="stToolbar"] {visibility: hidden;}
+    
+    /* FORZAMOS A QUE LA FLECHITA (>>) APAREZCA EN EL BORDE IZQUIERDO */
+    [data-testid="collapsedControl"] {
+        display: block !important;
+        visibility: visible !important;
+        color: #0e4d64 !important;
+        background-color: transparent !important;
+    }
     
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
@@ -74,7 +82,7 @@ with st.sidebar:
             st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
             st.rerun() 
 
-# --- ENCABEZADO (Sin redes sociales, solo texto limpio) ---
+# --- ENCABEZADO ---
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
@@ -124,7 +132,6 @@ with col_chat:
         except Exception as e:
             return f"Error de conexión: {e}"
 
-    # Caja de chat con altura fija
     with st.container(height=400, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
