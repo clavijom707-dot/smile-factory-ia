@@ -7,30 +7,18 @@ st.set_page_config(
     page_title="Smile Factory - Clínica Dental", 
     page_icon="🦷", 
     layout="wide", 
-    initial_sidebar_state="collapsed"  # Mantiene la barra oculta para que se vea limpio
+    initial_sidebar_state="collapsed"  # <--- Deja la barra oculta, mostrando la flechita >>
 )
 
-# --- CÓDIGO CSS (Limpia los iconos pero deja la flechita) ---
+# --- CÓDIGO CSS (Solo limpia los iconos de programador) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
     
-    /* Ocultamos solo los botones de Share/GitHub, NO la flechita */
-    [data-testid="stToolbarActions"] {display: none !important;}
-    [data-testid="stToolbar"] {background-color: transparent !important;}
-    
-    /* FORZAMOS A QUE LA FLECHITA SEA VISIBLE Y ELEGANTE */
-    [data-testid="collapsedControl"] {
-        display: block !important;
-        visibility: visible !important;
-        color: #0e4d64 !important;
-        background-color: #e9ecef !important;
-        border-radius: 0 5px 5px 0 !important;
-        padding: 8px !important;
-        z-index: 999999 !important;
-    }
+    /* Ocultamos Share/GitHub de forma segura */
+    [data-testid="stToolbar"] {visibility: hidden;}
     
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
@@ -49,7 +37,7 @@ if "messages" not in st.session_state:
 if "horario_actual" not in st.session_state:
     st.session_state.horario_actual = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
 
-# --- PANEL DE ADMINISTRADOR ---
+# --- PANEL DE ADMINISTRADOR (Oculto en la flechita) ---
 with st.sidebar:
     st.header("⚙️ Acceso Doctores")
     password = st.text_input("Contraseña:", type="password")
@@ -86,7 +74,7 @@ with st.sidebar:
             st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
             st.rerun() 
 
-# --- ENCABEZADO ---
+# --- ENCABEZADO (Sin botones feos) ---
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
@@ -102,7 +90,6 @@ with col_info:
     st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
-    # Botón de "Nueva Consulta" que ya tenías
     col_titulo, col_boton = st.columns([2, 1])
     with col_titulo:
         st.subheader("💬 Agenda tu cita aquí")
@@ -137,6 +124,7 @@ with col_chat:
         except Exception as e:
             return f"Error de conexión: {e}"
 
+    # Caja de chat con altura fija
     with st.container(height=400, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
@@ -150,4 +138,3 @@ with col_chat:
             st.session_state.messages.append({"role": "assistant", "content": respuesta})
             
         st.rerun()
-        
