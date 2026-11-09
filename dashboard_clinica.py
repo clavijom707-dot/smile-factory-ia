@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CÓDIGO CSS (Arregla el contraste y deja la flechita) ---
+# --- CÓDIGO CSS (Arregla el contraste de la caja de texto y deja la flechita) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
@@ -19,6 +19,7 @@ st.markdown("""
     [data-testid="stToolbarActions"] {display: none !important;}
     [data-testid="stToolbar"] {background-color: transparent !important;}
     
+    /* FLECHITA */
     [data-testid="collapsedControl"] {
         display: block !important;
         visibility: visible !important;
@@ -29,19 +30,34 @@ st.markdown("""
         z-index: 999999 !important;
     }
     
-    /* FORZAR COLOR DE TEXTO OSCURO PARA QUE SE LEA EN CELULARES CON MODO OSCURO */
+    /* FORZAR COLOR DE TEXTO OSCURO GENERAL */
     .stApp, .stMarkdown, p, span, h1, h2, h3, h4, h5, h6, label {
         color: #31333F !important;
     }
     
-    /* Estilos personalizados de los títulos */
+    /* FORZAR LA CAJA DE TEXTO A BLANCO CON LETRAS NEGRAS */
+    [data-testid="stChatInput"] {
+        background-color: #ffffff !important;
+        border: 1px solid #cccccc !important;
+        border-radius: 10px !important;
+    }
+    [data-testid="stChatInput"] textarea {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    [data-testid="stChatInput"] ::placeholder {
+        color: #666666 !important;
+    }
+    /* Arreglar los inputs de la barra lateral también */
+    .stTextInput input, .stTextArea textarea {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
+    /* ESTILOS VISUALES */
     .big-title {color: #0e4d64 !important; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
     .sub-title {color: #6c757d !important; font-size: 1.2rem; margin-bottom: 20px;}
-    
-    /* Forzar fondo claro en la app */
     .stApp {background-color: #f8f9fa !important;}
-    
-    /* Asegurar que el chat no herede fondos raros */
     [data-testid="stChatMessage"] {background-color: transparent !important;}
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     </style>
