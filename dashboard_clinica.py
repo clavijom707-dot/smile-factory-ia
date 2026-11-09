@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import urllib.request
 
-# --- CONFIGURACIÓN DE PÁGINA (Forzamos que la barra lateral esté abierta) ---
+# --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(
     page_title="Smile Factory - Clínica Dental", 
     page_icon="🦷", 
@@ -10,16 +10,32 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS CORREGIDO (Oculta menús pero deja la flechita del panel) ---
+# --- CÓDIGO CSS PARA DARLE ESTILO DE WEB REAL Y OCULTAR ICONOS DE PROGRAMADOR ---
 st.markdown("""
     <style>
+    /* Ocultar menús de Streamlit, botón de Deploy y la barra de compartir/GitHub */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    .stDeployButton {display:none;} /* Oculta el botón de Deploy */
+    .stDeployButton {display:none;}
+    [data-testid="stToolbar"] {visibility: hidden;} 
+    
+    /* Estilos de la página */
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
-    .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 30px;}
+    .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 20px;}
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
+    
+    /* Estilo para los iconos sociales */
+    .social-links a {
+        text-decoration: none;
+        font-size: 1.1rem;
+        margin-right: 20px;
+        font-weight: bold;
+        color: #0e4d64;
+    }
+    .social-links a:hover {
+        color: #007bff;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -68,10 +84,22 @@ with st.sidebar:
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
+# --- ICONOS DE REDES SOCIALES (Puedes cambiar los enlaces por los reales del doctor luego) ---
+st.markdown("""
+    <div class="social-links">
+        <a href="https://facebook.com/tu_clinica" target="_blank">📘 Facebook</a>
+        <a href="https://instagram.com/tu_clinica" target="_blank">📸 Instagram</a>
+        <a href="https://tiktok.com/@tu_clinica" target="_blank">🎵 TikTok</a>
+    </div>
+    <br>
+""", unsafe_allow_html=True)
+
+# --- CREAMOS DOS COLUMNAS ---
 col_info, col_chat = st.columns([1, 1], gap="large")
 
 with col_info:
-    st.image("https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
+    # Aquí ya está la imagen generada por IA (Recuerda haberla subido a GitHub como clinica.jpg)
+    st.image("clinica.jpg", use_container_width=True)
     st.write("### Bienvenido a la excelencia dental")
     st.write("En **Smile Factory** combinamos la calidez humana con la inteligencia artificial más avanzada. Nuestra recepcionista virtual está disponible las 24 horas.")
     st.markdown("#### Nuestros Servicios")
