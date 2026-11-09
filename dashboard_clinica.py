@@ -10,23 +10,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS (Oculta Share/GitHub y mantiene la flechita) ---
+# --- CÓDIGO CSS (Oculta Share/GitHub y deja la flechita) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
-    
-    /* Ocultamos SOLO la barra de herramientas (Share/GitHub) */
     [data-testid="stToolbar"] {display: none;}
-    
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
     .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 20px;}
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
-    
-    .social-links a {text-decoration: none; font-size: 1.1rem; margin-right: 20px; font-weight: bold; color: #0e4d64;}
-    .social-links a:hover { color: #007bff; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -81,21 +75,13 @@ with st.sidebar:
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
-st.markdown("""
-    <div class="social-links">
-        <a href="https://facebook.com" target="_blank">📘 Facebook</a>
-        <a href="https://instagram.com" target="_blank">📸 Instagram</a>
-        <a href="https://tiktok.com" target="_blank">🎵 TikTok</a>
-    </div>
-    <br>
-""", unsafe_allow_html=True)
-
 # --- COLUMNAS ---
 col_info, col_chat = st.columns([1, 1], gap="large")
 
 with col_info:
-    # FOTO DE INTERNET (Evita el error de OSError de la foto local)
+    # Usamos una foto profesional de internet para que no falle. 
     st.image("https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
+    
     st.write("### Bienvenido a la excelencia dental")
     st.write("En **Smile Factory** combinamos la calidez humana con la inteligencia artificial más avanzada. Nuestra recepcionista virtual está disponible las 24 horas.")
     st.markdown("#### Nuestros Servicios")
@@ -137,7 +123,7 @@ with col_chat:
         except Exception as e:
             return f"Error de conexión: {e}"
 
-    # Caja de chat con altura fija (El cuadro de texto siempre queda abajo)
+    # Caja de chat con altura fija
     with st.container(height=400, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
