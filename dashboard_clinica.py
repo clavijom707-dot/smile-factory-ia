@@ -24,17 +24,32 @@ ia_token = st.secrets["DEEPSEEK_TOKEN"]
 # --- PANEL DE ADMINISTRADOR (Barra Lateral) ---
 with st.sidebar:
     st.header("⚙️ Acceso Doctores")
-    # Contraseña secreta (Puedes cambiarla por la que quieras)
+    # Contraseña secreta
     password = st.text_input("Contraseña:", type="password")
     
     if password == "smile2026":
         st.success("Modo Administrador Activado")
-        # Aquí el doctor puede cambiar su horario sin tocar código
-        horario_personalizado = st.text_area(
-            "Configuración de Horario:", 
-            value="La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
+        
+        # MENÚ DE OPCIONES RÁPIDAS
+        opcion = st.radio(
+            "Seleccione el horario de atención de hoy:",
+            ("Solo Mañanas (8am - 12pm)", "Solo Tardes (2pm - 6pm)", "Mañana y Tarde", "Personalizado...")
         )
+        
+        if opcion == "Solo Mañanas (8am - 12pm)":
+            horario_personalizado = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
+        elif opcion == "Solo Tardes (2pm - 6pm)":
+            horario_personalizado = "La agenda está llena en las mañanas. SOLO ofrece citas en la TARDE (14:00 a 18:00)."
+        elif opcion == "Mañana y Tarde":
+            horario_personalizado = "El doctor atiende en la MAÑANA (8:00 a 12:00) y en la TARDE (14:00 a 18:00). Ofrece ambos horarios al paciente."
+        else:
+            # Si elige "Personalizado", le aparece la caja de texto
+            horario_personalizado = st.text_area(
+                "Escriba la instrucción exacta:", 
+                value="Hoy el doctor solo atiende en la tarde de 3 a 5 PM."
+            )
     else:
+        # Si no hay contraseña, usa el horario por defecto
         horario_personalizado = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
 
 # --- ENCABEZADO DE LA WEB ---
@@ -52,7 +67,7 @@ with col_info:
     st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
-    # --- EL CEREBRO DE NATALY (Ahora usa la variable del administrador) ---
+    # --- EL CEREBRO DE NATALY ---
     system_prompt = f"""
     Eres Nataly, la recepcionista virtual de la clínica dental 'Smile Factory'.
     Tus reglas:
