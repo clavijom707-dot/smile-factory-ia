@@ -21,10 +21,13 @@ st.markdown("""
 # --- SEGURIDAD: Lee el token ---
 ia_token = st.secrets["DEEPSEEK_TOKEN"]
 
+# Inicializamos el estado del chat aquí para que el botón de borrar funcione
+if "messages" not in st.session_state:
+    st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
+
 # --- PANEL DE ADMINISTRADOR (Barra Lateral) ---
 with st.sidebar:
     st.header("⚙️ Acceso Doctores")
-    # Contraseña secreta
     password = st.text_input("Contraseña:", type="password")
     
     if password == "smile2026":
@@ -43,13 +46,19 @@ with st.sidebar:
         elif opcion == "Mañana y Tarde":
             horario_personalizado = "El doctor atiende en la MAÑANA (8:00 a 12:00) y en la TARDE (14:00 a 18:00). Ofrece ambos horarios al paciente."
         else:
-            # Si elige "Personalizado", le aparece la caja de texto
             horario_personalizado = st.text_area(
                 "Escriba la instrucción exacta:", 
                 value="Hoy el doctor solo atiende en la tarde de 3 a 5 PM."
             )
+            
+        st.divider()
+        
+        # BOTÓN PARA LIMPIAR EL CHAT
+        if st.button("🗑️ Limpiar Historial de Chat"):
+            st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
+            st.rerun() # Refresca la página al instante
+            
     else:
-        # Si no hay contraseña, usa el horario por defecto
         horario_personalizado = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
 
 # --- ENCABEZADO DE LA WEB ---
@@ -98,9 +107,6 @@ with col_chat:
     st.subheader("💬 Agenda tu cita aquí")
     
     with st.container(border=True):
-        if "messages" not in st.session_state:
-            st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
-
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
