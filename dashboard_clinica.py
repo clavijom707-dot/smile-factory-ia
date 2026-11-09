@@ -10,15 +10,29 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS (Mantiene la flechita y oculta Share/GitHub) ---
+# --- CÓDIGO CSS (Fuerza la flechita y oculta Share/GitHub) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
     
-    /* Usamos visibility en lugar de display para NO romper la flechita de la barra lateral */
+    /* Ocultamos SOLO los iconos de programador */
     [data-testid="stToolbar"] {visibility: hidden;}
+    
+    /* LA MAGIA: Forzamos a que la flechita (>>) siempre esté visible */
+    [data-testid="collapsedControl"] { 
+        display: block !important; 
+        visibility: visible !important; 
+        z-index: 9999;
+        background-color: #0e4d64;
+        border-radius: 5px;
+    }
+    
+    /* Forzamos a que la barra lateral se muestre */
+    [data-testid="stSidebar"] {
+        display: block !important;
+    }
     
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
@@ -124,7 +138,6 @@ with col_chat:
         except Exception as e:
             return f"Error de conexión: {e}"
 
-    # Caja de chat con altura fija
     with st.container(height=400, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
