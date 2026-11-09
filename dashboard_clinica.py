@@ -10,16 +10,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS (Limpia la pantalla y oculta la barra de arriba) ---
+# --- CÓDIGO CSS ARREGLADO (Deja la flechita visible y oculta solo Share/GitHub) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
     
-    /* OCULTAMOS LA BARRA SUPERIOR NATIVA (Share, GitHub, etc.) */
-    [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stHeader"] {background: transparent;}
+    /* Ocultamos SOLO la barra de herramientas (Share/GitHub), NO la cabecera entera */
+    [data-testid="stToolbar"] {display: none;}
     
     /* Estilos visuales */
     .stApp {background-color: #f8f9fa;}
@@ -28,13 +27,7 @@ st.markdown("""
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     
     /* Iconos sociales */
-    .social-links a {
-        text-decoration: none;
-        font-size: 1.1rem;
-        margin-right: 20px;
-        font-weight: bold;
-        color: #0e4d64;
-    }
+    .social-links a {text-decoration: none; font-size: 1.1rem; margin-right: 20px; font-weight: bold; color: #0e4d64;}
     .social-links a:hover { color: #007bff; }
     </style>
 """, unsafe_allow_html=True)
@@ -57,14 +50,13 @@ with st.sidebar:
     if password == "smile2026":
         st.success("Modo Administrador Activado")
         
-        # --- NUEVO BOTÓN DE COMPARTIR EN EL PANEL ---
+        # --- BOTÓN DE COMPARTIR EN EL PANEL ---
         st.write("### 🔗 Compartir Clínica")
         enlace_app = "https://smile-factory-ia-fkq5qvkpcytjtlfnats7yp.streamlit.app"
-        st.code(enlace_app, language="text") # st.code crea un botón automático de "copiar"
+        st.code(enlace_app, language="text")
         
         st.divider()
         
-        # CONFIGURACIÓN DE HORARIO
         opcion = st.radio(
             "Seleccione el horario de atención de hoy:",
             ("Solo Mañanas (8am - 12pm)", "Solo Tardes (2pm - 6pm)", "Mañana y Tarde", "Personalizado...")
@@ -113,6 +105,15 @@ with col_info:
     st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
+    # Botón de "Nueva Consulta" para limpiar la memoria del paciente anterior
+    col_titulo, col_boton = st.columns([2, 1])
+    with col_titulo:
+        st.subheader("💬 Agenda tu cita aquí")
+    with col_boton:
+        if st.button("🔄 Nueva Consulta", use_container_width=True):
+            st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
+            st.rerun()
+
     system_prompt = f"""
     Eres Nataly, la recepcionista virtual de la clínica dental 'Smile Factory'.
     Tus reglas:
@@ -139,10 +140,8 @@ with col_chat:
         except Exception as e:
             return f"Error de conexión: {e}"
 
-    st.subheader("💬 Agenda tu cita aquí")
-    
     # Caja de chat con altura fija
-    with st.container(height=450, border=True):
+    with st.container(height=400, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
