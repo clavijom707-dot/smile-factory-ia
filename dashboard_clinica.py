@@ -10,72 +10,69 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CÓDIGO CSS (Fuerza modo claro y arregla todos los contrastes) ---
+# --- CÓDIGO CSS DEFINITIVO (Colores fijos, sin importar el modo del celular) ---
 st.markdown("""
     <style>
+    /* Ocultar menús */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
     [data-testid="stToolbarActions"] {display: none !important;}
     [data-testid="stToolbar"] {background-color: transparent !important;}
     
-    /* FLECHITA */
+    /* 1. LA FLECHITA: Fondo azul oscuro y flecha blanca para que resalte siempre */
     [data-testid="collapsedControl"] {
         display: block !important;
         visibility: visible !important;
-        color: #0e4d64 !important;
-        background-color: #e9ecef !important;
+        background-color: #0e4d64 !important; /* Azul de la clínica */
         border-radius: 0 5px 5px 0 !important;
-        padding: 8px !important;
+        padding: 10px !important;
         z-index: 999999 !important;
     }
-    
-    /* FORZAR MODO CLARO EN TODA LA APP */
-    .stApp {
-        background-color: #f8f9fa !important;
-        color: #31333F !important;
+    [data-testid="collapsedControl"] svg {
+        fill: #ffffff !important; /* Flecha blanca */
+        color: #ffffff !important;
     }
     
-    /* FORZAR TEXTOS OSCUROS */
-    h1, h2, h3, h4, h5, h6, p, span, div, label {
-        color: #31333F !important;
-    }
-    
-    /* ARREGLAR EL FONDO DEL CHAT Y LOS BOTONES (Quitar el negro) */
-    [data-testid="stChatMessage"] {
-        background-color: #ffffff !important;
-        border: 1px solid #e0e0e0 !important;
-        border-radius: 10px !important;
-    }
-    
-    /* ARREGLAR LA CAJA DE TEXTO INFERIOR */
+    /* 2. LA CAJA DE TEXTO DEL CHAT: Fondo blanco, texto negro, botón visible */
     [data-testid="stChatInput"] {
-        background-color: #f8f9fa !important;
-    }
-    [data-testid="stChatInput"] > div {
         background-color: #ffffff !important;
-        border: 1px solid #cccccc !important;
+        border: 1px solid #d1d5db !important;
+        border-radius: 10px !important;
     }
     [data-testid="stChatInput"] textarea {
         background-color: #ffffff !important;
         color: #000000 !important;
     }
+    [data-testid="stChatInput"] button {
+        background-color: #f3f4f6 !important; /* Botón de enviar gris clarito */
+        border: 1px solid #d1d5db !important;
+    }
+    [data-testid="stChatInput"] button svg {
+        fill: #0e4d64 !important; /* Flechita de enviar azul */
+    }
     
-    /* ARREGLAR BOTONES (Nueva consulta y Acceso) */
+    /* 3. LOS MENSAJES DEL CHAT: Fondo blanco y texto oscuro */
+    [data-testid="stChatMessage"] {
+        background-color: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 10px !important;
+    }
+    [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] div {
+        color: #111827 !important;
+    }
+
+    /* 4. TEXTOS GENERALES DE LA PÁGINA */
+    .stApp { background-color: #f8f9fa !important; }
+    .big-title {color: #0e4d64 !important; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
+    .sub-title {color: #6c757d !important; font-size: 1.2rem; margin-bottom: 20px;}
+    
+    /* Asegurar que el botón de Nueva Consulta sea visible */
     .stButton > button {
         background-color: #ffffff !important;
         color: #0e4d64 !important;
         border: 1px solid #0e4d64 !important;
-        border-radius: 8px !important;
     }
-    .stButton > button:hover {
-        background-color: #0e4d64 !important;
-        color: #ffffff !important;
-    }
-
-    /* ESTILOS DE TÍTULOS */
-    .big-title {color: #0e4d64 !important; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
-    .sub-title {color: #6c757d !important; font-size: 1.2rem; margin-bottom: 20px;}
     
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     </style>
@@ -191,4 +188,3 @@ with col_chat:
             st.session_state.messages.append({"role": "assistant", "content": respuesta})
             
         st.rerun()
-        
