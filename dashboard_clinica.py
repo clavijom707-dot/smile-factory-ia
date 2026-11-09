@@ -7,29 +7,28 @@ st.set_page_config(
     page_title="Smile Factory - Clínica Dental", 
     page_icon="🦷", 
     layout="wide", 
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"  # <--- AQUÍ LO OCULTAMOS POR DEFECTO
 )
 
-# --- CÓDIGO CSS (Fuerza la barra lateral abierta) ---
+# --- CÓDIGO CSS (Deja la flechita visible y oculta iconos feos) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
+    
+    /* Ocultamos solo la barra superior de GitHub/Share */
     [data-testid="stToolbar"] {visibility: hidden;}
     
-    /* FORZAR BARRA LATERAL ABIERTA SIEMPRE */
-    [data-testid="stSidebar"] {
-        display: block !important;
-        transform: translateX(0px) !important;
-        min-width: 300px !important;
-    }
-    
-    /* Mostrar flechita si se llega a cerrar */
+    /* HACEMOS LA FLECHITA MÁS VISIBLE Y ELEGANTE */
     [data-testid="collapsedControl"] {
         display: block !important;
-        background-color: #0e4d64 !important;
-        border-radius: 5px !important;
+        visibility: visible !important;
+        color: #0e4d64 !important;
+        background-color: #e9ecef !important;
+        border-radius: 0 10px 10px 0 !important;
+        padding: 10px !important;
+        top: 50% !important; /* La ponemos a media altura */
     }
     
     .stApp {background-color: #f8f9fa;}
