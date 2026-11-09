@@ -3,62 +3,43 @@ import json
 import urllib.request
 
 # --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="Smile Factory - Tu Clínica Dental", page_icon="🦷", layout="wide")
+st.set_page_config(page_title="Smile Factory - Clínica Dental", page_icon="🦷", layout="wide")
 
 # --- CÓDIGO CSS PARA DARLE ESTILO DE WEB REAL ---
 st.markdown("""
     <style>
-    /* Ocultar el menú de Streamlit para que parezca una web real */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    
-    /* Fondo general y tipografía */
-    .stApp {
-        background-color: #f4f9f9;
-    }
-    
-    /* Estilo para el título principal */
-    .big-title {
-        color: #0e4d64;
-        font-family: 'Helvetica Neue', sans-serif;
-        font-weight: bold;
-        font-size: 3rem;
-        margin-bottom: 0px;
-    }
-    
-    /* Estilo para el subtítulo */
-    .sub-title {
-        color: #5c5c5c;
-        font-size: 1.2rem;
-        margin-bottom: 30px;
-    }
+    .stApp {background-color: #f8f9fa;}
+    .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
+    .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 30px;}
+    .st-emotion-cache-1v0mbdj img {border-radius: 15px;} /* Redondear imágenes */
     </style>
 """, unsafe_allow_html=True)
 
-# --- SEGURIDAD: Lee el token desde la bóveda ---
+# --- SEGURIDAD ---
 ia_token = st.secrets["DEEPSEEK_TOKEN"]
 
 # --- ENCABEZADO DE LA WEB ---
 st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">Tu sonrisa perfecta, atendida por nuestra recepcionista virtual inteligente 24/7.</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
-# --- CREAMOS DOS COLUMNAS: Izquierda (Info) y Derecha (Chat) ---
+# --- CREAMOS DOS COLUMNAS ---
 col_info, col_chat = st.columns([1, 1], gap="large")
 
 with col_info:
-    st.subheader("Bienvenido a la clínica")
+    # Imagen de clínica moderna (Alta calidad)
+    st.image("https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
+    
+    st.write("### Bienvenido a la excelencia dental")
     st.write("""
-    En **Smile Factory** nos especializamos en brindarte la mejor atención dental. 
-    Nuestra inteligencia artificial está disponible para agendar tu cita al instante, sin esperas.
+    En **Smile Factory** combinamos la calidez humana con la inteligencia artificial más avanzada. 
+    Nuestra recepcionista virtual está disponible las 24 horas para agendar tu cita sin esperas.
     """)
     
-    # Aquí puedes poner un link a una imagen generada por IA o una foto de stock
-    # Por ahora usaremos una imagen de ejemplo de internet
-    st.image("https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=1000&auto=format&fit=crop", caption="Instalaciones modernas de Smile Factory")
-    
-    st.markdown("### Nuestros Servicios")
-    st.markdown("- 🦷 Limpieza Dental\n- 🪥 Ortodoncia (Brackets)\n- 🩺 Consulta General\n- ✨ Blanqueamiento")
+    st.markdown("#### Nuestros Servicios")
+    st.markdown("- 🦷 **Limpieza Dental:** Para una sonrisa radiante.\n- 🪥 **Ortodoncia:** Brackets y alineadores invisibles.\n- 🩺 **Consulta General:** Diagnóstico completo.\n- ✨ **Blanqueamiento:** Resultados inmediatos.")
 
 with col_chat:
     # --- EL CEREBRO DE NATALY ---
@@ -89,9 +70,9 @@ with col_chat:
             return f"Error de conexión: {e}"
 
     # --- INTERFAZ DEL CHAT ---
-    st.subheader("💬 Agenda tu cita ahora")
+    st.subheader("💬 Agenda tu cita aquí")
     
-    # Caja con borde para el chat
+    # Contenedor con borde para el chat
     with st.container(border=True):
         if "messages" not in st.session_state:
             st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
