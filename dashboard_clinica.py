@@ -10,31 +10,37 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CÓDIGO CSS DEFINITIVO (Colores fijos, sin importar el modo del celular) ---
+# --- CÓDIGO CSS DEFINITIVO (Fuerza letras oscuras en todos lados) ---
 st.markdown("""
     <style>
-    /* Ocultar menús */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
     [data-testid="stToolbarActions"] {display: none !important;}
     [data-testid="stToolbar"] {background-color: transparent !important;}
     
-    /* 1. LA FLECHITA: Fondo azul oscuro y flecha blanca para que resalte siempre */
+    /* FLECHITA VISIBLE */
     [data-testid="collapsedControl"] {
         display: block !important;
         visibility: visible !important;
-        background-color: #0e4d64 !important; /* Azul de la clínica */
+        color: #0e4d64 !important;
+        background-color: #e9ecef !important;
         border-radius: 0 5px 5px 0 !important;
-        padding: 10px !important;
+        padding: 8px !important;
         z-index: 999999 !important;
     }
-    [data-testid="collapsedControl"] svg {
-        fill: #ffffff !important; /* Flecha blanca */
-        color: #ffffff !important;
+    
+    /* FORZAR FONDO CLARO GLOBAL */
+    .stApp {
+        background-color: #f8f9fa !important;
     }
     
-    /* 2. LA CAJA DE TEXTO DEL CHAT: Fondo blanco, texto negro, botón visible */
+    /* FORZAR TODOS LOS TEXTOS A COLOR OSCURO (Adiós al modo oscuro) */
+    .stApp p, .stApp span, .stApp li, .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6, .stApp label, .stApp div {
+        color: #1f2937 !important;
+    }
+    
+    /* ARREGLAR CAJA DE TEXTO DEL CHAT */
     [data-testid="stChatInput"] {
         background-color: #ffffff !important;
         border: 1px solid #d1d5db !important;
@@ -44,35 +50,32 @@ st.markdown("""
         background-color: #ffffff !important;
         color: #000000 !important;
     }
-    [data-testid="stChatInput"] button {
-        background-color: #f3f4f6 !important; /* Botón de enviar gris clarito */
-        border: 1px solid #d1d5db !important;
-    }
-    [data-testid="stChatInput"] button svg {
-        fill: #0e4d64 !important; /* Flechita de enviar azul */
+    [data-testid="stChatInput"] ::placeholder {
+        color: #6b7280 !important;
     }
     
-    /* 3. LOS MENSAJES DEL CHAT: Fondo blanco y texto oscuro */
+    /* ARREGLAR MENSAJES DEL CHAT */
     [data-testid="stChatMessage"] {
         background-color: #ffffff !important;
         border: 1px solid #e5e7eb !important;
         border-radius: 10px !important;
     }
-    [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] div {
-        color: #111827 !important;
-    }
-
-    /* 4. TEXTOS GENERALES DE LA PÁGINA */
-    .stApp { background-color: #f8f9fa !important; }
-    .big-title {color: #0e4d64 !important; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
-    .sub-title {color: #6c757d !important; font-size: 1.2rem; margin-bottom: 20px;}
     
-    /* Asegurar que el botón de Nueva Consulta sea visible */
+    /* BOTÓN NUEVA CONSULTA */
     .stButton > button {
         background-color: #ffffff !important;
         color: #0e4d64 !important;
         border: 1px solid #0e4d64 !important;
+        border-radius: 8px !important;
     }
+    .stButton > button:hover {
+        background-color: #0e4d64 !important;
+        color: #ffffff !important;
+    }
+
+    /* TÍTULOS PRINCIPALES */
+    .big-title {color: #0e4d64 !important; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
+    .sub-title {color: #6c757d !important; font-size: 1.2rem; margin-bottom: 20px;}
     
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     </style>
