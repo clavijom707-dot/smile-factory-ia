@@ -10,16 +10,25 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CÓDIGO CSS PARA ESTILO ---
+# --- CÓDIGO CSS MEJORADO (Elimina Share, Estrella y GitHub) ---
 st.markdown("""
     <style>
+    /* Ocultar menús, footer y el botón de Deploy */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
+    
+    /* EL TRUCO FINAL: Ocultar la barra de herramientas superior (Share, Star, GitHub) */
+    [data-testid="stToolbar"] {visibility: hidden;}
+    [data-testid="stHeader"] {visibility: hidden;}
+    
+    /* Estilos visuales de la clínica */
     .stApp {background-color: #f8f9fa;}
     .big-title {color: #0e4d64; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
     .sub-title {color: #6c757d; font-size: 1.2rem; margin-bottom: 20px;}
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
+    
+    /* Estilo para los iconos sociales de la clínica */
     .social-links a {text-decoration: none; font-size: 1.1rem; margin-right: 20px; font-weight: bold; color: #0e4d64;}
     .social-links a:hover { color: #007bff; }
     </style>
@@ -28,11 +37,10 @@ st.markdown("""
 # --- SEGURIDAD ---
 ia_token = st.secrets["DEEPSEEK_TOKEN"]
 
-# --- MEMORIA DE LA APP (Para que el horario no se borre) ---
+# --- MEMORIA DE LA APP ---
 if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
 
-# Aquí guardamos el horario por defecto
 if "horario_actual" not in st.session_state:
     st.session_state.horario_actual = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
 
@@ -49,7 +57,6 @@ with st.sidebar:
             ("Solo Mañanas (8am - 12pm)", "Solo Tardes (2pm - 6pm)", "Mañana y Tarde", "Personalizado...")
         )
         
-        # Actualizamos la MEMORIA cuando el doctor cambia el botón
         if opcion == "Solo Mañanas (8am - 12pm)":
             st.session_state.horario_actual = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
         elif opcion == "Solo Tardes (2pm - 6pm)":
@@ -92,7 +99,6 @@ with col_info:
     st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
-    # Usamos la memoria del horario (así no se resetea al quitar la clave)
     system_prompt = f"""
     Eres Nataly, la recepcionista virtual de la clínica dental 'Smile Factory'.
     Tus reglas:
@@ -121,14 +127,12 @@ with col_chat:
 
     st.subheader("💬 Agenda tu cita aquí")
     
-    # EL TRUCO VISUAL: Encerramos el historial en una caja de 450px de alto
-    # Esto evita que el chat crezca y empuja el cuadro de texto al fondo.
+    # Caja de chat con altura fija (El cuadro siempre queda abajo)
     with st.container(height=450, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
 
-    # El cuadro de texto va afuera de la caja para que siempre quede abajo
     if prompt := st.chat_input("Escribe aquí..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         
@@ -136,5 +140,4 @@ with col_chat:
             respuesta = chatear(st.session_state.messages)
             st.session_state.messages.append({"role": "assistant", "content": respuesta})
             
-        # Recargamos la página para que el mensaje nuevo aparezca DENTRO de la caja de arriba
         st.rerun()
