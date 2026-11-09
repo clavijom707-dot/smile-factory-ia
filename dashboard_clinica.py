@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CÓDIGO CSS (Arregla el contraste de la caja de texto y deja la flechita) ---
+# --- CÓDIGO CSS (Fuerza modo claro y arregla todos los contrastes) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
@@ -30,35 +30,53 @@ st.markdown("""
         z-index: 999999 !important;
     }
     
-    /* FORZAR COLOR DE TEXTO OSCURO GENERAL */
-    .stApp, .stMarkdown, p, span, h1, h2, h3, h4, h5, h6, label {
+    /* FORZAR MODO CLARO EN TODA LA APP */
+    .stApp {
+        background-color: #f8f9fa !important;
         color: #31333F !important;
     }
     
-    /* FORZAR LA CAJA DE TEXTO A BLANCO CON LETRAS NEGRAS */
+    /* FORZAR TEXTOS OSCUROS */
+    h1, h2, h3, h4, h5, h6, p, span, div, label {
+        color: #31333F !important;
+    }
+    
+    /* ARREGLAR EL FONDO DEL CHAT Y LOS BOTONES (Quitar el negro) */
+    [data-testid="stChatMessage"] {
+        background-color: #ffffff !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 10px !important;
+    }
+    
+    /* ARREGLAR LA CAJA DE TEXTO INFERIOR */
     [data-testid="stChatInput"] {
+        background-color: #f8f9fa !important;
+    }
+    [data-testid="stChatInput"] > div {
         background-color: #ffffff !important;
         border: 1px solid #cccccc !important;
-        border-radius: 10px !important;
     }
     [data-testid="stChatInput"] textarea {
         background-color: #ffffff !important;
         color: #000000 !important;
     }
-    [data-testid="stChatInput"] ::placeholder {
-        color: #666666 !important;
-    }
-    /* Arreglar los inputs de la barra lateral también */
-    .stTextInput input, .stTextArea textarea {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-    }
     
-    /* ESTILOS VISUALES */
+    /* ARREGLAR BOTONES (Nueva consulta y Acceso) */
+    .stButton > button {
+        background-color: #ffffff !important;
+        color: #0e4d64 !important;
+        border: 1px solid #0e4d64 !important;
+        border-radius: 8px !important;
+    }
+    .stButton > button:hover {
+        background-color: #0e4d64 !important;
+        color: #ffffff !important;
+    }
+
+    /* ESTILOS DE TÍTULOS */
     .big-title {color: #0e4d64 !important; font-family: 'Helvetica Neue', sans-serif; font-weight: 800; font-size: 3.5rem; margin-bottom: 0px;}
     .sub-title {color: #6c757d !important; font-size: 1.2rem; margin-bottom: 20px;}
-    .stApp {background-color: #f8f9fa !important;}
-    [data-testid="stChatMessage"] {background-color: transparent !important;}
+    
     .st-emotion-cache-1v0mbdj img {border-radius: 15px;}
     </style>
 """, unsafe_allow_html=True)
@@ -173,3 +191,4 @@ with col_chat:
             st.session_state.messages.append({"role": "assistant", "content": respuesta})
             
         st.rerun()
+        
