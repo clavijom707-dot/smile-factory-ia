@@ -2,8 +2,13 @@ import streamlit as st
 import json
 import urllib.request
 
-# --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="Smile Factory - Clínica Dental", page_icon="🦷", layout="wide")
+# --- CONFIGURACIÓN DE PÁGINA (Forzamos que la barra lateral esté abierta) ---
+st.set_page_config(
+    page_title="Smile Factory - Clínica Dental", 
+    page_icon="🦷", 
+    layout="wide", 
+    initial_sidebar_state="expanded"
+)
 
 # --- CÓDIGO CSS PARA DARLE ESTILO DE WEB REAL ---
 st.markdown("""
@@ -21,7 +26,7 @@ st.markdown("""
 # --- SEGURIDAD: Lee el token ---
 ia_token = st.secrets["DEEPSEEK_TOKEN"]
 
-# Inicializamos el estado del chat aquí para que el botón de borrar funcione
+# Inicializamos el chat en el estado de la sesión
 if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
 
@@ -56,9 +61,10 @@ with st.sidebar:
         # BOTÓN PARA LIMPIAR EL CHAT
         if st.button("🗑️ Limpiar Historial de Chat"):
             st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
-            st.rerun() # Refresca la página al instante
+            st.rerun() 
             
     else:
+        # Horario por defecto si no se pone la contraseña
         horario_personalizado = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
 
 # --- ENCABEZADO DE LA WEB ---
