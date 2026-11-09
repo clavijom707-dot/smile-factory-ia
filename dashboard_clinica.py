@@ -7,15 +7,17 @@ st.set_page_config(
     page_title="Smile Factory - Clínica Dental", 
     page_icon="🦷", 
     layout="wide", 
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed"  # Mantiene la flechita para ocultar/mostrar el panel
 )
 
-# --- CÓDIGO CSS (Oculta Share/GitHub para que se vea limpio) ---
+# --- CÓDIGO CSS (Solo oculta los menús feos, sin romper la flechita) ---
 st.markdown("""
     <style>
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
+    
+    /* Ocultamos Share/GitHub de forma segura para no romper la flechita */
     [data-testid="stToolbar"] {visibility: hidden;}
     
     .stApp {background-color: #f8f9fa;}
@@ -35,62 +37,46 @@ if "messages" not in st.session_state:
 if "horario_actual" not in st.session_state:
     st.session_state.horario_actual = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
 
-if "mostrar_admin" not in st.session_state:
-    st.session_state.mostrar_admin = False
-
-# --- BARRA LATERAL (Se abrirá si el botón se presiona) ---
-if st.session_state.mostrar_admin:
-    with st.sidebar:
-        st.header("⚙️ Acceso Doctores")
-        password = st.text_input("Contraseña:", type="password")
+# --- PANEL DE ADMINISTRADOR ---
+with st.sidebar:
+    st.header("⚙️ Acceso Doctores")
+    password = st.text_input("Contraseña:", type="password")
+    
+    if password == "smile2026":
+        st.success("Modo Administrador Activado")
         
-        if password == "smile2026":
-            st.success("Modo Administrador Activado")
-            
-            st.write("### 🔗 Compartir Clínica")
-            enlace_app = "https://smile-factory-ia-fkq5qvkpcytjtlfnats7yp.streamlit.app"
-            st.code(enlace_app, language="text")
-            
-            st.divider()
-            
-            opcion = st.radio(
-                "Horario de atención de hoy:",
-                ("Solo Mañanas (8am - 12pm)", "Solo Tardes (2pm - 6pm)", "Mañana y Tarde", "Personalizado...")
+        st.write("### 🔗 Compartir Clínica")
+        enlace_app = "https://smile-factory-ia-fkq5qvkpcytjtlfnats7yp.streamlit.app"
+        st.code(enlace_app, language="text")
+        
+        st.divider()
+        
+        opcion = st.radio(
+            "Seleccione el horario de atención de hoy:",
+            ("Solo Mañanas (8am - 12pm)", "Solo Tardes (2pm - 6pm)", "Mañana y Tarde", "Personalizado...")
+        )
+        
+        if opcion == "Solo Mañanas (8am - 12pm)":
+            st.session_state.horario_actual = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
+        elif opcion == "Solo Tardes (2pm - 6pm)":
+            st.session_state.horario_actual = "La agenda está llena en las mañanas. SOLO ofrece citas en la TARDE (14:00 a 18:00)."
+        elif opcion == "Mañana y Tarde":
+            st.session_state.horario_actual = "El doctor atiende en la MAÑANA (8:00 a 12:00) y en la TARDE (14:00 a 18:00). Ofrece ambos horarios."
+        else:
+            st.session_state.horario_actual = st.text_area(
+                "Escriba la instrucción exacta:", 
+                value="Hoy el doctor solo atiende en la tarde de 3 a 5 PM."
             )
             
-            if opcion == "Solo Mañanas (8am - 12pm)":
-                st.session_state.horario_actual = "La agenda está llena en las tardes. SOLO ofrece citas en la MAÑANA (8:00 a 12:00)."
-            elif opcion == "Solo Tardes (2pm - 6pm)":
-                st.session_state.horario_actual = "La agenda está llena en las mañanas. SOLO ofrece citas en la TARDE (14:00 a 18:00)."
-            elif opcion == "Mañana y Tarde":
-                st.session_state.horario_actual = "El doctor atiende en la MAÑANA (8:00 a 12:00) y en la TARDE (14:00 a 18:00). Ofrece ambos horarios."
-            else:
-                st.session_state.horario_actual = st.text_area(
-                    "Instrucción exacta:", 
-                    value="Hoy el doctor solo atiende en la tarde de 3 a 5 PM."
-                )
-                
-            st.divider()
-            
-            if st.button("🗑️ Limpiar Historial de Chat"):
-                st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
-                st.rerun() 
-            
-            if st.button("❌ Cerrar Panel"):
-                st.session_state.mostrar_admin = False
-                st.rerun()
+        st.divider()
+        
+        if st.button("🗑️ Limpiar Historial de Chat"):
+            st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
+            st.rerun() 
 
-# --- ENCABEZADO Y BOTÓN DE ADMIN ---
-col_titulo, col_admin = st.columns([4, 1])
-with col_titulo:
-    st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
-
-with col_admin:
-    st.write("") # Espacio para alinear el botón
-    if st.button("🔐 Acceso Doctores", use_container_width=True):
-        st.session_state.mostrar_admin = not st.session_state.mostrar_admin
-        st.rerun()
+# --- ENCABEZADO (Sin redes sociales, solo texto limpio) ---
+st.markdown('<p class="big-title">🦷 Smile Factory</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Tecnología y salud dental en un solo lugar. Agenda tu cita con Nataly, nuestra IA 24/7.</p>', unsafe_allow_html=True)
 
 # --- COLUMNAS ---
 col_info, col_chat = st.columns([1, 1], gap="large")
@@ -104,10 +90,10 @@ with col_info:
     st.markdown("- 🦷 **Limpieza Dental**\n- 🪥 **Ortodoncia**\n- 🩺 **Consulta General**\n- ✨ **Blanqueamiento**")
 
 with col_chat:
-    col_sub, col_btn = st.columns([2, 1])
-    with col_sub:
+    col_titulo, col_boton = st.columns([2, 1])
+    with col_titulo:
         st.subheader("💬 Agenda tu cita aquí")
-    with col_btn:
+    with col_boton:
         if st.button("🔄 Nueva Consulta", use_container_width=True):
             st.session_state.messages = [{"role": "assistant", "content": "¡Hola! Bienvenido a Smile Factory. Soy Nataly, ¿en qué puedo ayudarle hoy? 🦷"}]
             st.rerun()
@@ -138,6 +124,7 @@ with col_chat:
         except Exception as e:
             return f"Error de conexión: {e}"
 
+    # Caja de chat con altura fija
     with st.container(height=400, border=True):
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
